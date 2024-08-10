@@ -1,5 +1,7 @@
 package learning.sample.main;
 
+import learning.sample.dto.Juice;
+
 /**
  * 学習用 Javaロジック実行メインクラス
  */
@@ -30,7 +32,11 @@ public class LearningMainApplication {
      */
     public static void sample01() {
         System.out.println("-----[sample01]-----");
-        // TODO
+        Juice cola = Juice.of("コーラ", 110);
+        Juice redbull = Juice.of("レッドブル", 220);
+
+        System.out.println(String.format("味：%s、金額：%s円", cola.getTaste(), cola.getPrice()));
+        System.out.println(String.format("味：%s、金額：%s円", redbull.getTaste(), redbull.getPrice()));
     }
 
     /**
