@@ -1,6 +1,8 @@
 package learning.sample.main;
 
+import java.util.*;
 import learning.sample.dto.Juice;
+import learning.sample.logic.VendingMachine;
 
 /**
  * 学習用 Javaロジック実行メインクラス
@@ -35,8 +37,8 @@ public class LearningMainApplication {
         Juice cola = Juice.of("コーラ", 110);
         Juice redbull = Juice.of("レッドブル", 220);
 
-        System.out.println(String.format("味：%s、金額：%s円", cola.getTaste(), cola.getPrice()));
-        System.out.println(String.format("味：%s、金額：%s円", redbull.getTaste(), redbull.getPrice()));
+        System.out.println(String.format("味：%s、金額：%d円", cola.getTaste(), cola.getPrice()));
+        System.out.println(String.format("味：%s、金額：%d円", redbull.getTaste(), redbull.getPrice()));
     }
 
     /**
@@ -62,7 +64,32 @@ public class LearningMainApplication {
      */
     public static void sample02() {
         System.out.println("-----[sample02]-----");
-        // TODO
+        VendingMachine juiceVender = new VendingMachine();
+        List<Juice> juices = Arrays.asList(Juice.of("コーラ", 110), Juice.of("ファンタグレープ", 110),
+                Juice.of("ミネラルウォータ", 100), Juice.of("レッドブル", 220), Juice.of("モンスター", 220));
+        for (Juice juice : juices) {
+            juiceVender.addJuice(juice);
+        }
+
+        buy("ファンタグレープ", 110, juiceVender);
+        buy("コーラ", 110, juiceVender);
+        buy("モンスター", 220, juiceVender);
+        buy("ミネラルウォータ", 100, juiceVender);
+        buy("レッドブル", 220, juiceVender);
+    }
+
+    private static void buy(String taste, int price, VendingMachine juiceVender) {
+        Juice juice = juiceVender.buy(taste, price);
+        if (juice != null) {
+            System.out.println(juiceMessage(juice));
+        } else {
+            System.out.println(String.format("%sは、売り切れ。", taste));
+        }
+    }
+
+    private static String juiceMessage(Juice juice) {
+        final String FORMAT = "味：%s、金額：%d円";
+        return String.format(FORMAT, juice.getTaste(), juice.getPrice());
     }
 
     /**
