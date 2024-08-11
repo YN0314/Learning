@@ -9,11 +9,14 @@ import learning.sample.dto.Juice;
 public class VendingMachine {
     /** ジュースリスト */
     private List<Juice> juices;
+    /** キャッシャー */
+    private List<Integer> casher;
 
     /** コンストラクタ */
     public VendingMachine() {
         // 初期化
         this.juices = new ArrayList<>();
+        this.casher = new ArrayList<>();
     }
 
     /**
@@ -44,9 +47,24 @@ public class VendingMachine {
         for (Juice juice : this.juices) {
             if (juice.getPrice() == price && juice.getTaste().equals(taste)) {
                 target = juice;
+                // 金額をキャッシャーに追加
+                this.casher.add(price);
                 break;
             }
         }
         return target;
+    }
+
+    /**
+     * 現在の売り上げ金額を返却する。
+     * 
+     * @return トータル売り上げ
+     */
+    public int totalCash() {
+        int total = 0;
+        for (Integer cash : this.casher) {
+            total = total + cash;
+        }
+        return total;
     }
 }
