@@ -65,11 +65,7 @@ public class LearningMainApplication {
     public static void sample02() {
         System.out.println("-----[sample02]-----");
         VendingMachine juiceVender = new VendingMachine();
-        List<Juice> juices = Arrays.asList(Juice.of("コーラ", 110), Juice.of("ファンタグレープ", 110),
-                Juice.of("ミネラルウォータ", 100), Juice.of("レッドブル", 220), Juice.of("モンスター", 220));
-        for (Juice juice : juices) {
-            juiceVender.addJuice(juice);
-        }
+        refillVendingMachien(juiceVender);
 
         buy("ファンタグレープ", 110, juiceVender);
         buy("コーラ", 110, juiceVender);
@@ -78,6 +74,13 @@ public class LearningMainApplication {
         buy("レッドブル", 220, juiceVender);
     }
 
+    /**
+     * 自動販売機から指定のジュースを購入して、どのジュースを購入できたのかを出力する。
+     * 
+     * @param taste 味
+     * @param price 金額
+     * @param juiceVender 自動販売機
+     */
     private static void buy(String taste, int price, VendingMachine juiceVender) {
         Juice juice = juiceVender.buy(taste, price);
         if (juice != null) {
@@ -87,9 +90,28 @@ public class LearningMainApplication {
         }
     }
 
+    /**
+     * ジュースの味と金額を出力します。
+     * 
+     * @param juice ジュース
+     * @return
+     */
     private static String juiceMessage(Juice juice) {
         final String FORMAT = "味：%s、金額：%d円";
         return String.format(FORMAT, juice.getTaste(), juice.getPrice());
+    }
+
+    /**
+     * ジュースを補充します。
+     * 
+     * @param juiceVender 自動販売機
+     */
+    private static void refillVendingMachien(VendingMachine juiceVender) {
+        List<Juice> juices = Arrays.asList(Juice.of("コーラ", 110), Juice.of("ファンタグレープ", 110),
+                Juice.of("ミネラルウォータ", 100), Juice.of("レッドブル", 220), Juice.of("モンスター", 220));
+        for (Juice juice : juices) {
+            juiceVender.addJuice(juice);
+        }
     }
 
     /**
@@ -106,7 +128,16 @@ public class LearningMainApplication {
      */
     public static void sample03() {
         System.out.println("-----[sample03]-----");
-        // TODO
+        VendingMachine juiceVender = new VendingMachine();
+        refillVendingMachien(juiceVender);
+
+        buy("ファンタグレープ", 110, juiceVender);
+        buy("コーラ", 110, juiceVender);
+        buy("モンスター", 220, juiceVender);
+        buy("ミネラルウォータ", 100, juiceVender);
+        buy("レッドブル", 220, juiceVender);
+
+        System.out.println(String.format("今回の売り上げ金額は、%d円", juiceVender.totalCash()));
     }
 
     /**
