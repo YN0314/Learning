@@ -65,7 +65,7 @@ public class LearningMainApplication {
     public static void sample02() {
         System.out.println("-----[sample02]-----");
         VendingMachine juiceVender = new VendingMachine();
-        refillVendingMachien(juiceVender);
+        refillVendingMachien(juiceVender, new ArrayList<>());
 
         buy("ファンタグレープ", 110, juiceVender);
         buy("コーラ", 110, juiceVender);
@@ -106,10 +106,12 @@ public class LearningMainApplication {
      * 
      * @param juiceVender 自動販売機
      */
-    private static void refillVendingMachien(VendingMachine juiceVender) {
-        List<Juice> juices = Arrays.asList(Juice.of("コーラ", 110), Juice.of("ファンタグレープ", 110),
-                Juice.of("ミネラルウォータ", 100), Juice.of("レッドブル", 220), Juice.of("モンスター", 220));
-        for (Juice juice : juices) {
+    private static void refillVendingMachien(VendingMachine juiceVender, List<Juice> stocks) {
+        if (stocks.isEmpty()) {
+            stocks.addAll(Arrays.asList(Juice.of("コーラ", 110), Juice.of("ファンタグレープ", 110),
+                    Juice.of("ミネラルウォータ", 100), Juice.of("レッドブル", 220), Juice.of("モンスター", 220)));
+        }
+        for (Juice juice : stocks) {
             juiceVender.addJuice(juice);
         }
     }
@@ -129,7 +131,7 @@ public class LearningMainApplication {
     public static void sample03() {
         System.out.println("-----[sample03]-----");
         VendingMachine juiceVender = new VendingMachine();
-        refillVendingMachien(juiceVender);
+        refillVendingMachien(juiceVender, new ArrayList<>());
 
         buy("ファンタグレープ", 110, juiceVender);
         buy("コーラ", 110, juiceVender);
@@ -159,7 +161,44 @@ public class LearningMainApplication {
      */
     public static void sample04() {
         System.out.println("-----[sample04]-----");
-        // TODO
+        VendingMachine juiceVender = new VendingMachine();
+        refillVendingMachien(juiceVender, generateJuices());
+        juiceVender.printStocks();
+    }
+
+    /**
+     * ジュースの補充データを用意する
+     * 
+     * @return ジュースリスト
+     */
+    private static List<Juice> generateJuices() {
+        List<Juice> stocks = new ArrayList<>();
+        List<Juice> colas = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            colas.add(Juice.of("コーラ", 110));
+        }
+        List<Juice> fantas = new ArrayList<>();
+        for (int i = 0; i < 2; i++) {
+            fantas.add(Juice.of("ファンタグレープ", 110));
+        }
+        List<Juice> waters = new ArrayList<>();
+        for (int i = 0; i < 11; i++) {
+            waters.add(Juice.of("ミネラルウォータ", 110));
+        }
+        List<Juice> redbulls = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            redbulls.add(Juice.of("レッドブル", 220));
+        }
+        List<Juice> monsters = new ArrayList<>();
+        for (int i = 0; i < 1; i++) {
+            monsters.add(Juice.of("モンスター", 220));
+        }
+        stocks.addAll(colas);
+        stocks.addAll(fantas);
+        stocks.addAll(waters);
+        stocks.addAll(redbulls);
+        stocks.addAll(monsters);
+        return stocks;
     }
 
     /**
