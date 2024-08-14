@@ -7,15 +7,15 @@ import learning.sample.dto.Juice;
  * 自動販売機クラス
  */
 public class VendingMachine {
-    /** ジュースリスト */
-    private List<Juice> juices;
+    /** ジュースマップ */
+    private Map<String, Deque<Juice>> stockMap;
     /** キャッシャー */
     private List<Integer> casher;
 
     /** コンストラクタ */
     public VendingMachine() {
         // 初期化
-        this.juices = new ArrayList<>();
+        this.stockMap = new LinkedHashMap<>();
         this.casher = new ArrayList<>();
     }
 
@@ -25,7 +25,11 @@ public class VendingMachine {
      * @param juice ジュース
      */
     public void addJuice(Juice juice) {
-        this.juices.add(juice);
+        if (this.stockMap.containsKey(juice.getTaste())) {
+            this.stockMap.get(juice.getTaste()).add(juice);
+        } else {
+            this.stockMap.put(juice.getTaste(), new LinkedList<>(Arrays.asList(juice)));
+        }
     }
 
     /**
@@ -40,19 +44,18 @@ public class VendingMachine {
      * @return ジュース
      */
     public Juice buy(String taste, int price) {
-        if (this.juices.isEmpty()) {
+        Deque<Juice> juiceQueue = this.stockMap.get(taste);
+        if (juiceQueue == null) {
             return null;
         }
-        Juice target = null;
-        for (Juice juice : this.juices) {
-            if (juice.getPrice() == price && juice.getTaste().equals(taste)) {
-                target = juice;
-                // 金額をキャッシャーに追加
-                this.casher.add(price);
-                break;
-            }
+        if (juiceQueue.isEmpty()) {
+            return null;
         }
-        return target;
+        Juice target = juiceQueue.getFirst();
+        if (target.getPrice() != price) {
+            return null;
+        }
+        return juiceQueue.pop();
     }
 
     /**
@@ -66,5 +69,18 @@ public class VendingMachine {
             total = total + cash;
         }
         return total;
+    }
+
+    /**
+     * 現在のジュース在庫を表示する。
+     */
+    public void printStocks() {
+        if (this.stockMap.isEmpty()) {
+            return;
+        }
+        this.stockMap.keySet().stream().forEach(key -> {
+            long count = this.stockMap.get(key).stream().count();
+            System.out.println(String.format("【在庫】%s: %d個", key, count));
+        });
     }
 }
